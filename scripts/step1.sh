@@ -1,3 +1,5 @@
+#!/bib/bash
+
 # Updates a given user with a new username and password.
 # Required flags: -u -p
 # Situaltional flags: -o [default: Ubuntu]
@@ -24,7 +26,7 @@ while [[ $# -gt 0 ]]; do
       shift # past argument
       shift # past value
       ;;
-    -*|--*)
+    -*)
       echo "Unknown option $1"
       exit 1
       ;;
@@ -36,7 +38,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Exit if we are missing a required argument.
-for arg_name in ${REQUIRED_ARGS[@]}; do
+for arg_name in "${REQUIRED_ARGS[@]}"; do
   if [[ -z "${!arg_name}" ]]
     then echo "Missing required argument: ${arg_name}"
     exit
@@ -46,10 +48,10 @@ done
 # Update the hosts file
 echo -e "\n# GFS Nodes" >> /etc/hosts
 for i in "${!PRIVATE_NODE_IPS[@]}"; do
-  echo -e "${PRIVATE_NODE_IPS[$i]} gfs$(( $i + 1 ))" >> /etc/hosts
+  echo -e "${PRIVATE_NODE_IPS[$i]} gfs$(( "$i" + 1 ))" >> /etc/hosts
 done
 
 # Inform the user
 mkdir -p /etc/messages
-echo "Please run step2.sh on all of your nodes before continuing." > /etc/messages/${USERNAME}
+echo "Please run step2.sh on all of your nodes before continuing." > "/etc/messages/${USERNAME}"
 echo "Please run step2.sh on all of your nodes before continuing."

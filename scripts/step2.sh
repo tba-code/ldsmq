@@ -15,8 +15,8 @@ POSITIONAL_ARGS=()
 
 while [[ $# -gt 0 ]]; do
   case $1 in
-    -d|--disk-size)
-      DISK_SIZE="$2"
+    -d|--device-size)
+      DEVICE_SIZE="$2"
       shift # past argument
       shift # past value
       ;;
@@ -25,7 +25,7 @@ while [[ $# -gt 0 ]]; do
       shift # past argument
       shift # past value
       ;;
-    -*|--*)
+    -*)
       echo "Unknown option $1"
       exit 1
       ;;
@@ -37,7 +37,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Exit if we are missing a required argument.
-for arg_name in ${REQUIRED_ARGS[@]}; do
+for arg_name in "${REQUIRED_ARGS[@]}"; do
   if [[ -z "${!arg_name}" ]]
     then echo "Missing required argument: ${arg_name}"
     exit

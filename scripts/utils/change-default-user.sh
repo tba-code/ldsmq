@@ -31,7 +31,7 @@ while [[ $# -gt 0 ]]; do
       shift # past argument
       shift # past value
       ;;
-    -*|--*)
+    -*)
       echo "Unknown option $1"
       exit 1
       ;;
@@ -43,7 +43,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Exit if we are missing a required argument.
-for arg_name in ${REQUIRED_ARGS[@]}; do
+for arg_name in "${REQUIRED_ARGS[@]}"; do
   if [[ -z "${!arg_name}" ]]
     then echo "Missing required argument: ${arg_name}"
     exit
@@ -65,8 +65,7 @@ groupmod -n "${USERNAME}" "${ORIGINAL_USERNAME}"
 usermod -d "/home/${USERNAME}" -m "${USERNAME}"
 
 # Change password automatically
-usermod --password $(echo "${PASSWORD}" | \
-openssl passwd -1 -stdin) "${USERNAME}"
+usermod --password "$(echo "${PASSWORD}" | openssl passwd -1 -stdin)" "${USERNAME}"
 
 # Print a message letting the user know execution has finished.
 echo "${ORIGINAL_USERNAME} has been renamed to ${USERNAME} and their passowrd has been updated."
