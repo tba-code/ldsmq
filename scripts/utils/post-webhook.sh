@@ -57,7 +57,7 @@ PAYLOAD="{\"content\": \"${MESSAGE}\"}"
 # TODO: Check result to determine if the message was actually posted or not.
 curl -i -H "Accept: application/json" \
 -H "Content-Type:application/json" \
--X POST --data "${PAYLOAD}" "${URL}"
+-X POST --data "${PAYLOAD}" "${URL}" > /dev/null
 
 # Print a message letting the user know execution has finished.
 echo "${MESSAGE} has been posted."
