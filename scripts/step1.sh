@@ -46,11 +46,11 @@ for arg_name in "${REQUIRED_ARGS[@]}"; do
 done
 
 # Update the hosts file
-echo -e "\n# GFS Nodes"
+echo -e "\n# GFS Nodes" >> /etc/hosts
 count=0
 for i in $PRIVATE_NODE_IPS; do
   count=$(( count + 1 ))
-  echo -e "$i" "gfs$count"
+  echo -e "$i" "gfs$count\n" >> /etc/hosts
 done
 
 # Inform the user
