@@ -10,7 +10,7 @@ if [ "$EUID" -ne 0 ]
 fi
 
 # Argument parser
-REQUIRED_ARGS=("DISK_SIZE")
+REQUIRED_ARGS=("DEVICE_SIZE" "NODE_ID")
 POSITIONAL_ARGS=()
 
 while [[ $# -gt 0 ]]; do
