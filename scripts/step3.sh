@@ -11,7 +11,7 @@ if [ "$EUID" -ne 0 ]
 fi
 
 # Argument parser
-REQUIRED_ARGS=("SWARM_SIZE" "USERNAME")
+REQUIRED_ARGS=("SWARM_SIZE")
 POSITIONAL_ARGS=()
 
 while [[ $# -gt 0 ]]; do
