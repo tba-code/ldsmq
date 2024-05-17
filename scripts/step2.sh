@@ -49,7 +49,7 @@ mkfs.xfs -f -L gfs-volumes "/dev/${DEVICE_ID}"
 mkdir "/gluster/bricks/${NODE_ID}" -p
 
 # Update fstab to mount the disk at boot
-echo "LABEL=gfs-volumes /dev/${DEVICE_ID} /gluster/bricks/${NODE_ID} xfs defaults 0 0" >> /etc/fstab
+echo "LABEL=gfs-volumes /gluster/bricks/${NODE_ID} xfs defaults 0 0" >> /etc/fstab
 mount -a
 mkdir "/gluster/bricks/${NODE_ID}/brick"
 
