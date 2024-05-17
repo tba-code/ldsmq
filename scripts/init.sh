@@ -1,48 +1,52 @@
 #!/bin/bash
 
-# Copy variables below this line
+# Fill these in
+NODE_ID=
+NODE_PREFIX=
+WEBHOOK=
+MESSAGE_PREFIX="${NODE_PREFIX}${NODE_ID}"
 USERNAME=
 PASSWORD=
-WEBHOOK=
-NODE_PREFIX='node-'
-NODE_ID="1"
-SWARM_SIZE=5
-DISK_SIZE="32G"
-ORIGINAL_USERNAME="Ubuntu"
-MESSAGE="${NODE_PREFIX}${NODE_ID} has finished initializing. Please log in and follow the provided instructions."
-
-# Clone the convenience scripts repo to disk.
-git clone 'https://github.com/tba-code/ldsmq.git'
-
-# Make sure scripts are executable. Also, give the user ownsership.
-readarray -d '' ldsmq_scripts < <(find ldsmq/scripts -name '*.sh' -type f)
-for script in "${scripts}"; do
-  chown -r "${USERNAME}:${USERNAME}" ldsmq
-  chmod +x "${script}"
-done
+ORIGINAL_USERNAME="ubuntu"
 
 # Update username and password
-"./ldsmq/scripts/utils/change-default-user.sh"\
-"-u ${USERNAME} "\
-"-o ${ORIGINAL_USERNAME} "\
-"-p ${PASSWORD} "
+curl https://raw.githubusercontent.com/tba-code/ldsmq/main/scripts/utils/change-default-user.sh | sudo bash -s -- \
+-u "${USERNAME}" \
+-o "${ORIGINAL_USERNAME}" \
+-p "${PASSWORD}"
+
+curl https://raw.githubusercontent.com/tba-code/ldsmq/main/scripts/utils/post-webhook.sh | sudo bash -s -- \
+-u "${WEBHOOK}" \
+-m "${MESSAGE_PREFIX}: Login credentials updated"
 
 # Update hostname
 hostnamectl set-hostname "${NODE_PREFIX}${NODE_ID}"
 
+curl https://raw.githubusercontent.com/tba-code/ldsmq/main/scripts/utils/post-webhook.sh | sudo bash -s -- \
+-u "${WEBHOOK}" \
+-m "${MESSAGE_PREFIX}: Hostname changed"
+
 # Install docker
-"./ldsmq/scripts/utils/get-docker.sh"\
-"-u ${USERNAME}"
+curl https://raw.githubusercontent.com/tba-code/ldsmq/main/scripts/utils/get-docker.sh | sudo bash -s -- \
+-u "${USERNAME}"
+
+curl https://raw.githubusercontent.com/tba-code/ldsmq/main/scripts/utils/post-webhook.sh | sudo bash -s -- \
+-u "${WEBHOOK}" \
+-m "${MESSAGE_PREFIX}: Docker Installed"
 
 # Install glusterfs
 apt-get install glusterfs-server -y
 systemctl start glusterd
 systemctl enable glusterd
 
+curl https://raw.githubusercontent.com/tba-code/ldsmq/main/scripts/utils/post-webhook.sh | sudo bash -s -- \
+-u "${WEBHOOK}" \
+-m "${MESSAGE_PREFIX}: GlusterFS Installed"
+
 # Enable login messages.
 echo "cat /etc/messages/${USERNAME}" >> "/home/${USERNAME}.bashrc"
 
 # Send a discord notification to the user letting them know the instance is ready.
-"./ldsmq/scripts/utils/change-default-user.sh"\
-"-u ${WEBHOOK_URL} "\
-"-m ${MESSAGE} "
+curl https://raw.githubusercontent.com/tba-code/ldsmq/main/scripts/utils/post-webhook.sh | sudo bash -s -- \
+-u "${WEBHOOK}" \
+-m "${MESSAGE_PREFIX} has finished initializing. Please refer to the guide for more details."
