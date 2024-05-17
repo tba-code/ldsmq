@@ -10,13 +10,13 @@ if [ "$EUID" -ne 0 ]
 fi
 
 # Argument parser
-REQUIRED_ARGS=("DEVICE_SIZE" "NODE_ID")
+REQUIRED_ARGS=("DEVICE_ID" "NODE_ID")
 POSITIONAL_ARGS=()
 
 while [[ $# -gt 0 ]]; do
   case $1 in
     -d|--device-size)
-      DEVICE_SIZE="$2"
+      DEVICE_ID="$2"
       shift # past argument
       shift # past value
       ;;
@@ -45,8 +45,6 @@ for arg_name in "${REQUIRED_ARGS[@]}"; do
 done
 
 # Prep the block device
-DEVICE_ID=$(lsblk | grep "${DEVICE_SIZE}" | head -c 7)
-
 mkfs.xfs -f "/dev/${DEVICE_ID}"
 mkdir "/gluster/bricks/${NODE_ID}" -p
 
