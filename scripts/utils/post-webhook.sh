@@ -51,13 +51,13 @@ done
 # TODO: Add ability to specify username and avatar if desired.
 # TODO: add optional mentions.
 # TODO: Vary structure by provider.
-PAYLOAD="{\"content\": \"${MESSAGE}\"}" "${URL}"
+PAYLOAD="{\"content\": \"${MESSAGE}\"}"
 
 # Attempt to post the webhook.
 # TODO: Check result to determine if the message was actually posted or not.
 curl -i -H "Accept: application/json" \
 -H "Content-Type:application/json" \
--X POST --data "${PAYLOAD}"
+-X POST --data "${PAYLOAD}" "${URL}"
 
 # Print a message letting the user know execution has finished.
 echo "${MESSAGE} has been posted."
